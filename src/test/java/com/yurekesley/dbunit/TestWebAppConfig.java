@@ -48,9 +48,9 @@ public class TestWebAppConfig extends WebMvcConfigurerAdapter {
 		em.setJpaVendorAdapter(vendorAdapter);
 
 		Map<String, Object> jpaProperties = new HashMap<String, Object>();
-		jpaProperties.put("hibernate.show_sql", "false");
-		jpaProperties.put("hibernate.format_sql", "false");
-		jpaProperties.put("hibernate.hbm2ddl.auto", "create-drop");
+		jpaProperties.put("hibernate.show_sql", "true");
+		jpaProperties.put("hibernate.format_sql", "true");
+		jpaProperties.put("hibernate.hbm2ddl.auto", "none");
 		jpaProperties.put("hibernate.temp.use_jdbc_metadata_defaults", "false");
 		jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
 		jpaProperties.put("database-platform", "org.hibernate.dialect.PostgreSQL9Dialect");

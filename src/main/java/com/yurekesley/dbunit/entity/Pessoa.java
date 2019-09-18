@@ -24,6 +24,11 @@ public @Data class Pessoa extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	public Pessoa(String nome, String cpf) {
+		this.nome = nome;
+		this.cpf = cpf;
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_pessoa_id")
 	@SequenceGenerator(sequenceName = "seq_pessoa_id", allocationSize = 1, name = "seq_pessoa_id")
