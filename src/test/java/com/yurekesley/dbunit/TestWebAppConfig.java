@@ -39,6 +39,16 @@ public class TestWebAppConfig extends WebMvcConfigurerAdapter {
 	private Environment env;
 
 	@Bean
+	public DataSource dataSource() {
+		SingleConnectionDataSource dataSource = new SingleConnectionDataSource();
+		dataSource.setUrl(env.getProperty("jdbc.url"));
+		dataSource.setUsername(env.getProperty("jdbc.username"));
+		dataSource.setPassword(env.getProperty("jdbc.password"));
+		dataSource.setSuppressClose(true);
+		return dataSource;
+	}
+
+	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSource());
@@ -60,6 +70,14 @@ public class TestWebAppConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
+	public DbUnitManager dbunitManager(DataSource dataSource, CustomDbUnitDataSetResolver dataSetResolver) {
+		CachedDbUnitConnectionCreator connectionCreator = new CachedDbUnitConnectionCreator(
+				new DefaultDbUnitConnectionCreator(dataSource));
+		DbUnitManager dbunitManager = new DefaultDbUnitManagerImpl(connectionCreator, dataSetResolver);
+		return dbunitManager;
+	}
+
+	@Bean
 	public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
 		transactionManager.setEntityManagerFactory(emf);
@@ -75,24 +93,6 @@ public class TestWebAppConfig extends WebMvcConfigurerAdapter {
 	public ResourceBundleMessageSource resourceBundle() {
 		ResourceBundleMessageSource resourceBundle = new ResourceBundleMessageSource();
 		return resourceBundle;
-	}
-	
-	@Bean
-	public DbUnitManager dbunitManager(DataSource dataSource, CustomDbUnitDataSetResolver dataSetResolver) {
-		CachedDbUnitConnectionCreator connectionCreator = new CachedDbUnitConnectionCreator(
-				new DefaultDbUnitConnectionCreator(dataSource));
-		DbUnitManager dbunitManager = new DefaultDbUnitManagerImpl(connectionCreator, dataSetResolver);
-		return dbunitManager;
-	}
-
-	@Bean
-	public DataSource dataSource() {
-		SingleConnectionDataSource dataSource = new SingleConnectionDataSource();
-		dataSource.setUrl(env.getProperty("jdbc.url"));
-		dataSource.setUsername(env.getProperty("jdbc.username"));
-		dataSource.setPassword(env.getProperty("jdbc.password"));
-		dataSource.setSuppressClose(true);
-		return dataSource;
 	}
 
 }
